@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+body {
+  background-color: #fee2e2; /* Tailwind red-100 equivalent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 140px;
+}
