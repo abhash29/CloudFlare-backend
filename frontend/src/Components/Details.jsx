@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function Details({work, time}) {
   return (
     <div className="max-w-sm rounded-2xl bg-white p-5 shadow-lg transition hover:-translate-y-1 hover:shadow-xl mt-10">

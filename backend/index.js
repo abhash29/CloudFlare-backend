@@ -14,11 +14,11 @@ app.get('/', (req, res) => {
 });
 
 //Work for database
-const todoSchema = new mongoose.Schema({work: {type: String, required: true}, time: {type: String, required: true}, mark: {type: Boolean , default: false}});
+const todoSchema = new mongoose.Schema({work: {type: String, required: true}, time: {type: String, required: true}});
 const Todo = mongoose.model("Todo", todoSchema);
 
 //Zod Schema
-const todoSchemaZod = z.object({work: z.string().min(3), time: z.string(), mark: z.boolean().optional()});
+const todoSchemaZod = z.object({work: z.string().min(3), time: z.string()});
 
 //backend
 app.get('/todos', async (req, res) => {
@@ -64,16 +64,18 @@ app.delete('/todos/:id', async (req, res) => {
     }
 })
 //3. Update Todo
-app.put("/mark/:id", async (req, res) => {
+app.put("/todos/:id", async (req, res) => {
     const id = req.params.id;
     try{
-    const {work, time, mark} = req.body;
-    const result = todoSchemaZod.safeParse({work, time, mark});
+    const {work, time} = req.body;
+    const result = todoSchemaZod.safeParse({work, time});
     if(!result.success){
+        console.log("Result not passed");
         return res.status(400).json({msg: "Invalid input"});
     }
-    const updateTask = await Todo.findByIdAndUpdate(id, {work: work, time: time, mark: mark});
+    const updateTask = await Todo.findByIdAndUpdate(id, {work: work, time: time});
     if(!updateTask){
+        console.log("Id not found");
         return res.status(404).json({msg: "Id not found"});
     }
     res.status(200).json({msg: 'updated successfully'});
@@ -84,7 +86,7 @@ app.put("/mark/:id", async (req, res) => {
 });
 
 //Update mark
-app.put('/todos/:id', async (req, res) => {
+/*app.put('/todos/:id', async (req, res) => {
     const id = req.params.id;
     const {mark} = req.body;
     try{
@@ -97,7 +99,7 @@ app.put('/todos/:id', async (req, res) => {
     catch(error){
         console.log(error);
     }
-})
+})*/
 
 //List 1 todo
 app.get("/todos/:id", async (req, res) => {
